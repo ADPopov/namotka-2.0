@@ -20,6 +20,7 @@ import {useTypeSelector} from "./hooks/useTypeSelector";
 import {BsPlusCircle, CgFeed, VscAccount} from 'react-icons/all';
 import {ColorModeSwitcher} from './components/assets/ColorModeSwitcher';
 import {SettingsIcon} from '@chakra-ui/icons'
+import AppRouter from "./components/AppRouter/index.js";
 
 
 const LoginBar: FC = () => {
@@ -92,20 +93,13 @@ const NavigationBar: FC = () => {
     );
 }
 
-const Routers: FC = () => {
-    return (
-        null
-    );
-};
-
-
 const App: FC = () => {
     return (
         <Box>
             <Header/>
             <Divider/>
             <Container maxW="container.xl" pt={5}>
-                <Routers/>
+                <AppRouter/>
             </Container>
         </Box>
     );
