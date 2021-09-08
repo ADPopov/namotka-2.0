@@ -1,10 +1,24 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useTypeSelector} from "../../hooks/useTypeSelector";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {privateRouters, publicRoutes} from "../../routes";
 import {RouteNames} from "../../routes";
+import { supabase } from '../../api/supabaseClient';
+import {useAction} from "../../hooks/useAction";
 
 const AppRouter = () => {
+
+    const { setIsAuth } = useAction();
+
+
+
+    useEffect(() => {
+        const user = supabase.auth.user()
+        if(user) {
+            setIsAuth(true);
+        }
+    },[])
+
     const {isAuth} = useTypeSelector(state => state.auth)
 
     return (

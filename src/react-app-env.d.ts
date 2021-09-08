@@ -1,1 +1,3 @@
 /// <reference types="react-scripts" />
+REACT_APP_SUPABASE_URL="https://oquotddyaxsvrmaptqfx.supabase.co"
+REACT_APP_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzMDU3MDU1MiwiZXhwIjoxOTQ2MTQ2NTUyfQ.BmC_73nmqLmexJLxd3Iam_LPtMZS4Iz37I5gzdIO3WM"

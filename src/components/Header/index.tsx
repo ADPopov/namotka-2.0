@@ -18,22 +18,25 @@ import {
 import {ColorModeSwitcher} from "../assets/ColorModeSwitcher";
 import {BsPlusCircle, CgFeed, VscAccount} from "react-icons/all";
 import {SettingsIcon} from "@chakra-ui/icons";
+import {supabase} from '../../api/supabaseClient';
+import {useAction} from "../../hooks/useAction";
 
 const LoginBar: FC = () => {
     return (
         <>
-            <Button colorScheme="teal" fontSize={14} variant="outline" mr="4">
-                Log In
-            </Button>
-            <Button colorScheme="orange" fontSize={14} mr="4">
-                Sign Up
-            </Button>
+            {/*<Button colorScheme="teal" fontSize={14} variant="outline" mr="4">*/}
+            {/*    Log In*/}
+            {/*</Button>*/}
+            {/*<Button colorScheme="orange" fontSize={14} mr="4">*/}
+            {/*    Sign Up*/}
+            {/*</Button>*/}
         </>
     )
 }
 
 const Header: FC = () => {
     const {isAuth} = useTypeSelector(state => state.auth);
+
 
     return (
         <Flex alignItems={'center'} pt={2} pr={5} pb={2} pl={5}>
@@ -50,7 +53,22 @@ const Header: FC = () => {
 };
 
 const ProfileMenu: FC = () => {
-    const {isOpen, onOpen, onClose} = useDisclosure();
+    const {onOpen} = useDisclosure();
+
+    const {setIsAuth} = useAction();
+
+    const logOut = async () => {
+        try {
+            const {error} = await supabase.auth.signOut()
+            if (error) throw error
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsAuth(false);
+        }
+
+    }
+
     return (
         <>
             <Menu placement={"bottom-end"}>
@@ -63,7 +81,7 @@ const ProfileMenu: FC = () => {
                     <MenuGroup>
                         <MenuItem onClick={onOpen} icon={<Center><SettingsIcon/></Center>}>Settings</MenuItem>
                         <MenuDivider/>
-                        <MenuItem>Log Out</MenuItem>
+                        <MenuItem onClick={logOut}>Log Out</MenuItem>
                     </MenuGroup>
                 </MenuList>
             </Menu>
@@ -73,7 +91,7 @@ const ProfileMenu: FC = () => {
 }
 
 const NavigationBar: FC = () => {
-    const {isOpen, onOpen, onClose} = useDisclosure();
+    const {onOpen} = useDisclosure();
     return (
         <>
             <Flex alignItems={'center'}>
