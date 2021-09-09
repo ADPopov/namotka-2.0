@@ -1,5 +1,5 @@
 import {Box, Button, Heading, SimpleGrid, Text, VisuallyHidden,} from '@chakra-ui/react';
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {SubmitHandler} from 'react-hook-form';
 import {FaFacebook, FaGithub, FaGoogle} from 'react-icons/fa';
 import {ILoginFormInput, LoginForm} from '../components/forms/LoginForm';
@@ -7,35 +7,21 @@ import {Link} from '../components/assets/Link';
 import {Card} from '../components/assets/Card';
 import {DividerWithText} from '../components/assets/DividerWithText';
 import {useHistory} from "react-router-dom";
-import {supabase} from "../api/supabaseClient";
 import {useAction} from "../hooks/useAction";
 import {RouteNames} from "../routes";
+import {useCustomToast} from "../hooks/useCustom";
 
 
 const Login: FC = () => {
 
-    const {setIsAuth} = useAction();
-    const {setErrorMessage} = useAction();
-    const [isLoading, setLoading] = useState(false);
-
+    const {login} = useAction();
+    const toast = useCustomToast();
 
     const onSubmit: SubmitHandler<ILoginFormInput> = async data => {
         try {
-            setLoading(true)
-            const {user, error} = await supabase.auth.signIn({
-                email: data.email,
-                password: data.password,
-            })
-            if (error) throw setErrorMessage(error.message)
-            if (user) {
-                setIsAuth(true);
-                setErrorMessage('')
-            }
-        } catch (error) {
-
-            console.log(error)
-        } finally {
-            setLoading(false)
+            await login(data.email, data.password);
+        } catch (error: any) {
+            toast("Error", error.message, 'error');
         }
     };
 
@@ -43,7 +29,6 @@ const Login: FC = () => {
 
     function handleClick() {
         history.push(RouteNames.SIGN_UP);
-        setErrorMessage('');
     }
 
     return (
@@ -60,7 +45,7 @@ const Login: FC = () => {
                     <Link onClick={handleClick}>Sign up</Link>
                 </Text>
                 <Card>
-                    <LoginForm onSubmit={onSubmit} isLoading={isLoading}/>
+                    <LoginForm onSubmit={onSubmit}/>
                     <DividerWithText mt="6">or continue with</DividerWithText>
                     <SimpleGrid mt="6" columns={3} spacing="3">
                         <Button color="currentColor" variant="outline">

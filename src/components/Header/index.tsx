@@ -18,7 +18,6 @@ import {
 import {ColorModeSwitcher} from "../assets/ColorModeSwitcher";
 import {BsPlusCircle, CgFeed, VscAccount} from "react-icons/all";
 import {SettingsIcon} from "@chakra-ui/icons";
-import {supabase} from '../../api/supabaseClient';
 import {useAction} from "../../hooks/useAction";
 
 const LoginBar: FC = () => {
@@ -55,18 +54,10 @@ const Header: FC = () => {
 const ProfileMenu: FC = () => {
     const {onOpen} = useDisclosure();
 
-    const {setIsAuth} = useAction();
+    const {logout} = useAction();
 
     const logOut = async () => {
-        try {
-            const {error} = await supabase.auth.signOut()
-            if (error) throw error
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setIsAuth(false);
-        }
-
+        logout();
     }
 
     return (

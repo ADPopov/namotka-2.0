@@ -1,12 +1,11 @@
 export interface AuthState {
     isAuth: boolean,
-    error: string
+    isLoading: boolean
 }
 
 export enum AuthActionsEnum {
     SET_AUTH = 'SET_AUTH',
     SET_LOADING = 'SET_LOADING',
-    SET_ERROR = 'SET_ERROR'
 }
 
 export interface SetAuthAction {
@@ -14,11 +13,12 @@ export interface SetAuthAction {
     payload: boolean;
 }
 
-export interface SetErrorAction {
-    type: AuthActionsEnum.SET_ERROR;
-    payload: string;
+
+export interface SetLoadingAction {
+    type: AuthActionsEnum.SET_LOADING;
+    payload: boolean;
 }
 
 export type AuthAction =
     SetAuthAction |
-    SetErrorAction
+    SetLoadingAction

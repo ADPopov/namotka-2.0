@@ -29,7 +29,6 @@ const AppRouter = () => {
                            exact={route.exact}
                            component={route.component}
                            key={route.path}/>)}
-                toDo: Make a redirect to an authenticated user
                 <Redirect to={'/1'} />
             </Switch>
             :
