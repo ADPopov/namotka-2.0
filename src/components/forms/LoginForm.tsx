@@ -10,10 +10,11 @@ export interface ILoginFormInput {
 }
 
 export interface ILoginFormProps {
-    onSubmit: SubmitHandler<ILoginFormInput>
+    onSubmit: SubmitHandler<ILoginFormInput>,
+    errorMessage: string
 }
 
-export const LoginForm: FC<ILoginFormProps> = ({onSubmit}) => {
+export const LoginForm: FC<ILoginFormProps> = ({onSubmit, errorMessage}) => {
 
     const schema = yup.object().shape({
         email: yup.string().email().required(),
@@ -23,16 +24,17 @@ export const LoginForm: FC<ILoginFormProps> = ({onSubmit}) => {
     const {register, handleSubmit, formState: {errors}} = useForm<ILoginFormInput>({resolver: yupResolver(schema)});
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} >
+            <Box color={"red.500"} minH={"8"} pb={2}>{errorMessage}</Box>
             <Stack spacing={6}>
                 <FormControl>
                     <FormLabel>Email address</FormLabel>
-                    <Input label="Email" {...register("email",)} />
+                    <Input {...register("email",)} />
                     {<Box color={"red.500"} pt={1}>{errors.email?.message}</Box>}
                 </FormControl>
                 <FormControl>
                     <FormLabel>Password</FormLabel>
-                    <Input label="Password" type="password" {...register("password",)} />
+                    <Input type="password" {...register("password",)} />
                     {<Box color={"red.500"} pt={1}>{errors.password?.message}</Box>}
                 </FormControl>
                 <Button type="submit">Log In</Button>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Box, Button, Heading, SimpleGrid, Text, VisuallyHidden} from "@chakra-ui/react";
 import {Card} from "../components/assets/Card";
 import {Link} from "../components/assets/Link";
@@ -9,6 +9,7 @@ import {IRegisterFormInput, RegisterForm} from "../components/forms/RegisterForm
 import {SubmitHandler} from "react-hook-form";
 import {useAction} from "../hooks/useAction";
 import {useCustomToast} from "../hooks/useCustom";
+import {RouteNames} from "../routes";
 
 
 const Registration = () => {
@@ -16,6 +17,8 @@ const Registration = () => {
     const history = useHistory();
     const {signUp} = useAction();
     const toast = useCustomToast();
+    const [errorMessage, setErrorMessage] = useState('');
+
 
     function handleClick() {
         history.push("/signin");
@@ -27,11 +30,9 @@ const Registration = () => {
             toast("Confirm your email address",
                 'Check your email for the login link',
                 'success');
+            history.push(RouteNames.LOGIN)
         } catch (error: any) {
-            toast(
-                "Error",
-                error.message,
-                'error');
+            setErrorMessage(error.message)
         }
     };
 
@@ -49,7 +50,7 @@ const Registration = () => {
                     <Link onClick={handleClick}>Sign in</Link>
                 </Text>
                 <Card>
-                    <RegisterForm onSubmit={onSubmit}/>
+                    <RegisterForm onSubmit={onSubmit} errorMessage={errorMessage}/>
                     <DividerWithText mt="6">or sign up using</DividerWithText>
                     <SimpleGrid mt="6" columns={3} spacing="3">
                         <Button color="currentColor" variant="outline">

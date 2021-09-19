@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {useTypeSelector} from "../../hooks/useTypeSelector";
 import {
+    Box,
     Button,
     Center,
     Divider,
@@ -19,6 +20,7 @@ import {ColorModeSwitcher} from "../assets/ColorModeSwitcher";
 import {BsPlusCircle, CgFeed, VscAccount} from "react-icons/all";
 import {SettingsIcon} from "@chakra-ui/icons";
 import {useAction} from "../../hooks/useAction";
+import { SettingsModal } from '../SettingsModalWindow';
 
 const LoginBar: FC = () => {
     return (
@@ -35,10 +37,8 @@ const LoginBar: FC = () => {
 
 const Header: FC = () => {
     const {isAuth} = useTypeSelector(state => state.auth);
-
-
     return (
-        <Flex alignItems={'center'} pt={2} pr={5} pb={2} pl={5}>
+        <Flex alignItems={'center'} pt={2} pr={5} pb={2} pl={5} minH={"70px"}>
             <Heading as={'a'} href={'/'} size={'md'} fontWeight="bold"> NAMOTKA </Heading>
             <Spacer/>
             {isAuth ?
@@ -52,7 +52,7 @@ const Header: FC = () => {
 };
 
 const ProfileMenu: FC = () => {
-    const {onOpen} = useDisclosure();
+    const {onOpen, onClose, isOpen} = useDisclosure();
 
     const {logout} = useAction();
 
@@ -76,7 +76,7 @@ const ProfileMenu: FC = () => {
                     </MenuGroup>
                 </MenuList>
             </Menu>
-            {/*<SettingsModal onClose={onClose} isOpen={isOpen}/>*/}
+            <SettingsModal onClose={onClose} isOpen={isOpen}/>
         </>
     )
 }
@@ -84,7 +84,7 @@ const ProfileMenu: FC = () => {
 const NavigationBar: FC = () => {
     const {onOpen} = useDisclosure();
     return (
-        <>
+        <Box>
             <Flex alignItems={'center'}>
                 <Button as="a" variant="ghost" p={0} href="#" onClick={() => onOpen()}><BsPlusCircle size="20"/>
                 </Button>
@@ -94,7 +94,7 @@ const NavigationBar: FC = () => {
                 <ProfileMenu/>
             </Flex>
             {/*<PostWindow isOpen={isOpen} onClose={onClose} type={'create'}/>*/}
-        </>
+        </Box>
     );
 }
 

@@ -1,5 +1,5 @@
 import {Box, Button, Heading, SimpleGrid, Text, VisuallyHidden,} from '@chakra-ui/react';
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {SubmitHandler} from 'react-hook-form';
 import {FaFacebook, FaGithub, FaGoogle} from 'react-icons/fa';
 import {ILoginFormInput, LoginForm} from '../components/forms/LoginForm';
@@ -9,23 +9,21 @@ import {DividerWithText} from '../components/assets/DividerWithText';
 import {useHistory} from "react-router-dom";
 import {useAction} from "../hooks/useAction";
 import {RouteNames} from "../routes";
-import {useCustomToast} from "../hooks/useCustom";
 
 
 const Login: FC = () => {
 
     const {login} = useAction();
-    const toast = useCustomToast();
+    const [errorMessage, setErrorMessage] = useState('');
+    const history = useHistory();
 
     const onSubmit: SubmitHandler<ILoginFormInput> = async data => {
         try {
             await login(data.email, data.password);
         } catch (error: any) {
-            toast("Error", error.message, 'error');
+            setErrorMessage(error.message)
         }
     };
-
-    const history = useHistory();
 
     function handleClick() {
         history.push(RouteNames.SIGN_UP);
@@ -34,7 +32,7 @@ const Login: FC = () => {
     return (
         <Box
             py="20"
-            px={{base: '4', lg: '8'}}
+            px={{base: '2', lg: '8'}}
         >
             <Box maxW="md" mx="auto">
                 <Heading textAlign="center" size="xl" fontWeight="extrabold">
@@ -45,7 +43,7 @@ const Login: FC = () => {
                     <Link onClick={handleClick}>Sign up</Link>
                 </Text>
                 <Card>
-                    <LoginForm onSubmit={onSubmit}/>
+                    <LoginForm onSubmit={onSubmit} errorMessage={errorMessage}/>
                     <DividerWithText mt="6">or continue with</DividerWithText>
                     <SimpleGrid mt="6" columns={3} spacing="3">
                         <Button color="currentColor" variant="outline">

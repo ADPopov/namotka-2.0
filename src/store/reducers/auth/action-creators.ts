@@ -1,6 +1,7 @@
 import {AuthActionsEnum, SetAuthAction, SetLoadingAction} from "./types";
 import {AppDispatch} from "../../index";
 import {supabase} from "../../../api/supabaseClient";
+import {ProfileActionCreators} from "../profile/action-creators";
 
 export const AuthActionCreators = {
     setIsAuth: (isAuth: boolean): SetAuthAction => ({type: AuthActionsEnum.SET_AUTH, payload: isAuth}),
@@ -19,7 +20,8 @@ export const AuthActionCreators = {
             dispatch(AuthActionCreators.setLoading(true));
             const {user, error} = await supabase.auth.signIn({email, password})
             if(user){
-                dispatch(AuthActionCreators.setIsAuth(true));
+                await dispatch(AuthActionCreators.setIsAuth(true));
+                await dispatch<any>(ProfileActionCreators.fetchProfile())
             }
             if(error) throw error
         } finally {
@@ -33,5 +35,12 @@ export const AuthActionCreators = {
         } finally {
             dispatch(AuthActionCreators.setIsAuth(false));
         }
-    }
+    },
+    session: () => async (dispatch: AppDispatch) => {
+        const session = await supabase.auth.session();
+        if (session){
+            dispatch<any>(ProfileActionCreators.fetchProfile());
+            dispatch(AuthActionCreators.setIsAuth(true));
+        }
+    },
 }

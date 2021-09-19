@@ -2,6 +2,7 @@ import React from "react";
 import Login from "../pages/Login";
 import Blog from "../pages/Blog";
 import Registration from "../pages/Registration";
+import Feed from "../pages/Feed";
 
 export interface IRoute {
     path: RouteNames;
@@ -14,7 +15,8 @@ export enum RouteNames {
     BLOG_BY_ID = '/:userId(\\d+)',
     CREATE_POST = '/create',
     EDIT_POST = '/edit/:postId',
-    SIGN_UP = '/signup'
+    SIGN_UP = '/signup',
+    FEED = '/feed'
 }
 
 export const publicRoutes: IRoute[] = [
@@ -31,6 +33,11 @@ export const publicRoutes: IRoute[] = [
 ]
 
 export const privateRouters: IRoute[] = [
+    {
+        path: RouteNames.FEED,
+        component: Feed,
+        exact: true
+    },
     {
         path: RouteNames.BLOG_BY_ID,
         component: Blog,

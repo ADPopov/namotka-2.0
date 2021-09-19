@@ -2,7 +2,7 @@ import {AuthAction, AuthActionsEnum, AuthState} from "./types";
 
 const initialState : AuthState = {
     isAuth: false,
-    isLoading: false,
+    isLoading: false
 }
 
 export default function AuthReducer(state = initialState, action : AuthAction) : AuthState {

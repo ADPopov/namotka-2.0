@@ -13,42 +13,37 @@ export interface IRegisterFormInput {
 
 export interface IRegistrationFormProps {
     onSubmit: SubmitHandler<IRegisterFormInput>
+    errorMessage: string
 }
 
-export const RegisterForm: FC<IRegistrationFormProps> = ({onSubmit}) => {
+export const RegisterForm: FC<IRegistrationFormProps> = ({onSubmit, errorMessage}) => {
 
     const schema = yup.object().shape({
         email: yup.string().email().required(),
         password: yup.string().required(),
-        username: yup.string().required().required(),
-        passwordConfirmation: yup.string()
-            .oneOf([yup.ref('password'), null], 'Passwords must match')
+        username: yup.string().required(),
     });
 
     const {register, handleSubmit, formState: {errors}} = useForm<IRegisterFormInput>({resolver: yupResolver(schema)});
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            <Box color={"red.500"} minH={"8"} pb={2}>{errorMessage}</Box>
             <Stack spacing={6}>
                 <FormControl>
                     <FormLabel>Email address</FormLabel>
-                    <Input label="Email" type={"email"} formNoValidate={true} {...register("email",)} />
-                    {<Box color={"red.500"} pt={1}>{errors.email?.message}</Box>}
-                </FormControl>
-                <FormControl>
-                    <FormLabel>Username</FormLabel>
-                    <Input label="Username" formNoValidate={true} {...register("username",)} />
+                    <Input type={"email"} formNoValidate={true} {...register("email",)} />
                     {<Box color={"red.500"} pt={1}>{errors.email?.message}</Box>}
                 </FormControl>
                 <FormControl>
                     <FormLabel>Password</FormLabel>
-                    <Input label="Password" type="password" {...register("password",)} />
+                    <Input  type="password" {...register("password",)} />
                     {<Box color={"red.500"} pt={1}>{errors.password?.message}</Box>}
                 </FormControl>
                 <FormControl>
-                    <FormLabel>Password confirmation</FormLabel>
-                    <Input label="passwordConfirmation" type="password" {...register("passwordConfirmation",)} />
-                    {<Box color={"red.500"} pt={1}>{errors.passwordConfirmation?.message}</Box>}
+                    <FormLabel>Username</FormLabel>
+                    <Input type="password" {...register("username",)} />
+                    {<Box color={"red.500"} pt={1}>{errors.username?.message}</Box>}
                 </FormControl>
                 <Button type="submit">Sign Up</Button>
             </Stack>

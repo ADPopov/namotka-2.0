@@ -1,7 +1,7 @@
 
 export interface IComment {
     id: number,
-    author: IUser,
+    author: IProfile,
     createdAt: string,
     likeCount: number,
     body: string
@@ -9,7 +9,7 @@ export interface IComment {
 
 export interface IPost {
     id: string,
-    author: IUser,
+    author: IProfile,
     createdAt: string,
     updatedAt: string,
     title: string,
@@ -19,15 +19,16 @@ export interface IPost {
     viewCount: number
 }
 
-export interface IUser {
+export interface IProfile {
     id: string,
     createdAt: string,
     updatedAt: string,
     avatarURL?: string,
+    about: string
     username?: string,
-    displayName?: string,
-    followers?: IUser[],
-    following?: IUser[],
+    display_name?: string,
+    followers?: IProfile[],
+    following?: IProfile[],
     posts?: IPost[],
     website?: string
 }

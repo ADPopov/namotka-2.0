@@ -1,45 +1,31 @@
 import React, {useEffect} from 'react';
 import {useTypeSelector} from "../../hooks/useTypeSelector";
 import {Redirect, Route, Switch} from "react-router-dom";
-import {privateRouters, publicRoutes} from "../../routes";
-import {RouteNames} from "../../routes";
-import { supabase } from '../../api/supabaseClient';
+import {privateRouters, publicRoutes, RouteNames} from "../../routes";
 import {useAction} from "../../hooks/useAction";
 
 const AppRouter = () => {
-
-    const { setIsAuth } = useAction();
-
-
-
+    const {isAuth} = useTypeSelector(state => state.auth);
+    const {session} = useAction();
     useEffect(() => {
-        const user = supabase.auth.user()
-        if(user) {
-            setIsAuth(true);
-        }
-    },[])
-
-    const {isAuth} = useTypeSelector(state => state.auth)
-
+        session()
+    }, [])
     return (
         isAuth ?
-            <Switch>
-                {privateRouters.map(route =>
-                    <Route path={route.path}
-                           exact={route.exact}
-                           component={route.component}
-                           key={route.path}/>)}
-                <Redirect to={'/1'} />
+            <Switch>{privateRouters.map(route =>
+                <Route path={route.path}
+                       exact={route.exact}
+                       component={route.component}
+                       key={route.path}/>)}
+                <Redirect to={RouteNames.FEED}/>
             </Switch>
             :
-            <Switch>
-                {publicRoutes.map(route =>
-                    <Route path={route.path}
-                           exact={route.exact}
-                           component={route.component}
-                           key={route.path}/>)}
-
-                <Redirect to={RouteNames.LOGIN} />
+            <Switch>{publicRoutes.map(route =>
+                <Route path={route.path}
+                       exact={route.exact}
+                       component={route.component}
+                       key={route.path}/>)}
+                <Redirect to={RouteNames.LOGIN}/>
             </Switch>
     )
 };
