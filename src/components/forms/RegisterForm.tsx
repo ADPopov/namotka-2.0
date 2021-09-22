@@ -42,7 +42,7 @@ export const RegisterForm: FC<IRegistrationFormProps> = ({onSubmit, errorMessage
                 </FormControl>
                 <FormControl>
                     <FormLabel>Username</FormLabel>
-                    <Input type="password" {...register("username",)} />
+                    <Input {...register("username",)} />
                     {<Box color={"red.500"} pt={1}>{errors.username?.message}</Box>}
                 </FormControl>
                 <Button type="submit">Sign Up</Button>

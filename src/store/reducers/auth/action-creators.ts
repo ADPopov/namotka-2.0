@@ -21,7 +21,7 @@ export const AuthActionCreators = {
             const {user, error} = await supabase.auth.signIn({email, password})
             if(user){
                 await dispatch(AuthActionCreators.setIsAuth(true));
-                await dispatch<any>(ProfileActionCreators.fetchProfile())
+                await dispatch<any>(ProfileActionCreators.fetchProfile(user.id))
             }
             if(error) throw error
         } finally {
@@ -39,7 +39,7 @@ export const AuthActionCreators = {
     session: () => async (dispatch: AppDispatch) => {
         const session = await supabase.auth.session();
         if (session){
-            dispatch<any>(ProfileActionCreators.fetchProfile());
+            dispatch<any>(ProfileActionCreators.fetchProfile(session.user!.id));
             dispatch(AuthActionCreators.setIsAuth(true));
         }
     },

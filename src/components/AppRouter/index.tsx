@@ -7,12 +7,15 @@ import {useAction} from "../../hooks/useAction";
 const AppRouter = () => {
     const {isAuth} = useTypeSelector(state => state.auth);
     const {session} = useAction();
+
     useEffect(() => {
         session()
     }, [])
+
     return (
         isAuth ?
-            <Switch>{privateRouters.map(route =>
+            <Switch>
+                {privateRouters.map(route =>
                 <Route path={route.path}
                        exact={route.exact}
                        component={route.component}
@@ -20,7 +23,8 @@ const AppRouter = () => {
                 <Redirect to={RouteNames.FEED}/>
             </Switch>
             :
-            <Switch>{publicRoutes.map(route =>
+            <Switch>
+                {publicRoutes.map(route =>
                 <Route path={route.path}
                        exact={route.exact}
                        component={route.component}

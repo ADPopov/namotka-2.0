@@ -1,34 +1,37 @@
 import {AppDispatch} from "../../index";
 import {supabase} from "../../../api/supabaseClient";
 import {ProfileActionsEnum, setProfile} from "./types";
+import {IProfile, IProfileUpdate} from "../../../models/User";
 
 export const ProfileActionCreators = {
-    setProfile: (profile: any): setProfile => ({type: ProfileActionsEnum.SET_PROFILE, payload: profile}),
-    fetchProfile: () => async (dispatch: AppDispatch) => {
-        let {data: profiles, error} = await supabase
+    setProfile: (profile: IProfile): setProfile => ({type: ProfileActionsEnum.SET_PROFILE, payload: profile}),
+    fetchProfile: (id: string) => async (dispatch: AppDispatch) => {
+        let { data, error } = await supabase
             .from('profiles')
-            .select()
+            .select(`*`)
+            .eq('id', id)
+            .single()
         if (error) throw error
-        dispatch(ProfileActionCreators.setProfile(profiles![0]))
+        dispatch(ProfileActionCreators.setProfile(data))
     },
-    updateProfile: ({username, website, displayName, about}: any ) => async (dispatch: AppDispatch) => {
-        const user = supabase.auth.user();
+    updateProfile: ({username, website, display_name, about}: IProfile ) => async (dispatch: AppDispatch) => {
+        const user = await supabase.auth.user();
         if (user) {
-            const updates = {
+            const updates : IProfileUpdate = {
                 id: user.id,
                 username,
                 website,
                 about,
-                display_name: displayName,
+                display_name: display_name,
                 updated_at: new Date(),
             }
             let {error} = await supabase.from('profiles').upsert(updates, {
                 returning: "minimal"
             })
-            dispatch<any>(ProfileActionCreators.fetchProfile())
             if (error) {
                 throw error
             }
+            dispatch<any>(ProfileActionCreators.setProfile(updates));
         }
     }
 }

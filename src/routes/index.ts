@@ -3,6 +3,7 @@ import Login from "../pages/Login";
 import Blog from "../pages/Blog";
 import Registration from "../pages/Registration";
 import Feed from "../pages/Feed";
+import PostView from "../pages/Post/PostView";
 
 export interface IRoute {
     path: RouteNames;
@@ -12,7 +13,7 @@ export interface IRoute {
 
 export enum RouteNames {
     LOGIN = '/login',
-    BLOG_BY_ID = '/:userId(\\d+)',
+    BLOG_BY_ID = '/blog/:userId',
     CREATE_POST = '/create',
     EDIT_POST = '/edit/:postId',
     SIGN_UP = '/signup',
@@ -36,17 +37,16 @@ export const privateRouters: IRoute[] = [
     {
         path: RouteNames.FEED,
         component: Feed,
-        exact: true
     },
     {
         path: RouteNames.BLOG_BY_ID,
         component: Blog,
-        exact: true
+        exact: false
     },
     {
         path: RouteNames.CREATE_POST,
-        component: Blog,
-        exact: true
+        component: PostView,
+        exact: false
     },
     {
         path: RouteNames.EDIT_POST,

@@ -1,23 +1,11 @@
-import React, {FC} from 'react';
-import {
-    Box,
-    Button,
-    Flex,
-    FormControl,
-    FormLabel,
-    Grid,
-    Input,
-    ModalBody,
-    ModalContent,
-    Stack
-} from "@chakra-ui/react";
+import React, {FC, useState} from 'react';
+import {Box, Button, Flex, FormControl, FormLabel, Grid, Input, ModalBody, ModalContent, Stack} from "@chakra-ui/react";
 import {FieldErrors, SubmitHandler, useForm} from "react-hook-form";
 import SideBar from "./SideBar";
 import {IProfile} from "../../models/User";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useAction} from "../../hooks/useAction";
-
 interface iContentProps {
     profile: IProfile,
     onClose: () => void,
@@ -33,10 +21,19 @@ export interface IGeneralSettingsFormInput {
 const Content: FC<iContentProps> = ({profile, onClose}) => {
     const schema = yup.object().shape({});
     const {updateProfile} = useAction();
+    const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit: SubmitHandler<IGeneralSettingsFormInput> = async data => {
-        updateProfile({username: data.username, website: data.website, displayName: data.displayName, about: data.about});
+        setIsLoading(true);
+        await updateProfile({
+            username: data.username,
+            website: data.website,
+            display_name: data.displayName,
+            about: data.about
+        });
+        setIsLoading(false);
     };
+
 
     const {
         register,
@@ -55,6 +52,7 @@ const Content: FC<iContentProps> = ({profile, onClose}) => {
                             <Button onClick={onClose}>Cancel</Button>
                             <Button colorScheme={'teal'}
                                     type={'button'}
+                                    isLoading={isLoading}
                                     onClick={handleSubmit(onSubmit)}
                                     variant={'outline'} ml={3}>Save</Button>
                         </Flex>
@@ -92,7 +90,7 @@ const GeneralSettingsForm: FC<IGeneralSettingsFormProps> = ({register, errors, p
                 </FormControl>
                 <FormControl>
                     <FormLabel>Website</FormLabel>
-                    <Input defaultValue={profile.website}  {...register("website",)} />
+                    <Input defaultValue={profile.website} {...register("website",)} />
                     {<Box color={"red.500"} pt={1}>{errors.website?.message}</Box>}
                 </FormControl>
             </Stack>

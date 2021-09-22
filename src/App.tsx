@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {Box, Container, Divider, useColorModeValue} from "@chakra-ui/react";
-import AppRouter from "./components/AppRouter/index.js";
+import AppRouter from "./components/AppRouter";
 import Header from './components/Header';
 
 

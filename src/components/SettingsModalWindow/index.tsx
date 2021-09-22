@@ -13,7 +13,7 @@ export const SettingsModal: FC<SettingsProps> = ({onClose, isOpen}) => {
     return (
         <Modal onClose={onClose} size={'2xl'} isOpen={isOpen}>
             <ModalOverlay/>
-            {profile != undefined ? <Content profile={profile} onClose={onClose}/> : null}
+            {profile ? <Content profile={profile} onClose={onClose}/> : null}
         </Modal>
     )
 }

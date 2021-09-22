@@ -8,15 +8,13 @@ import {useHistory} from "react-router-dom";
 import {IRegisterFormInput, RegisterForm} from "../components/forms/RegisterForm";
 import {SubmitHandler} from "react-hook-form";
 import {useAction} from "../hooks/useAction";
-import {useCustomToast} from "../hooks/useCustom";
 import {RouteNames} from "../routes";
 
 
 const Registration = () => {
 
     const history = useHistory();
-    const {signUp} = useAction();
-    const toast = useCustomToast();
+    const {signUp, updateProfile} = useAction();
     const [errorMessage, setErrorMessage] = useState('');
 
 
@@ -24,12 +22,10 @@ const Registration = () => {
         history.push("/signin");
     }
 
-    const onSubmit: SubmitHandler<IRegisterFormInput> = async data => {
+    const onSubmit: SubmitHandler<IRegisterFormInput> = async ({username, email, password}) => {
         try {
-            await signUp(data.email, data.password);
-            toast("Confirm your email address",
-                'Check your email for the login link',
-                'success');
+            await signUp(email, password);
+            await updateProfile({username, website: '', display_name: '', about: ''})
             history.push(RouteNames.LOGIN)
         } catch (error: any) {
             setErrorMessage(error.message)

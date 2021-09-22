@@ -20,15 +20,17 @@ export interface IPost {
 }
 
 export interface IProfile {
-    id: string,
-    createdAt: string,
-    updatedAt: string,
+    id?: string,
     avatarURL?: string,
-    about: string
+    about?: string
     username?: string,
     display_name?: string,
     followers?: IProfile[],
     following?: IProfile[],
     posts?: IPost[],
     website?: string
+}
+
+export interface IProfileUpdate extends IProfile {
+    updated_at: Date,
 }

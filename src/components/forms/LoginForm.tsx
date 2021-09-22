@@ -3,6 +3,7 @@ import React, {FC} from "react";
 import * as yup from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {Box, Button, FormControl, FormLabel, Input, Stack} from "@chakra-ui/react";
+import {useTypeSelector} from "../../hooks/useTypeSelector";
 
 export interface ILoginFormInput {
     email: string,
@@ -21,6 +22,8 @@ export const LoginForm: FC<ILoginFormProps> = ({onSubmit, errorMessage}) => {
         password: yup.string().required()
     });
 
+    const isLoading = useTypeSelector(state => state.auth.isLoading);
+
     const {register, handleSubmit, formState: {errors}} = useForm<ILoginFormInput>({resolver: yupResolver(schema)});
 
     return (
@@ -37,7 +40,7 @@ export const LoginForm: FC<ILoginFormProps> = ({onSubmit, errorMessage}) => {
                     <Input type="password" {...register("password",)} />
                     {<Box color={"red.500"} pt={1}>{errors.password?.message}</Box>}
                 </FormControl>
-                <Button type="submit">Log In</Button>
+                <Button type="submit" isLoading={isLoading}>Log In</Button>
             </Stack>
         </form>
     )
